@@ -9,7 +9,7 @@ parseFormat = function(s, file.ext = ".csv") {
   # how many levels are there?
   n.exploded = length(exploded)
 
-  print(exploded)
+  #print(exploded)
 
   exploded = lapply(exploded, function(fragment) {
     exploded2 = strsplit(fragment, split = "_", fixed = TRUE)[[1L]]
@@ -18,24 +18,24 @@ parseFormat = function(s, file.ext = ".csv") {
 
   # flatten structure
   exploded = purrr::flatten(exploded)
-  print(exploded)
+  #print(exploded)
 
 
   # now save positions which are to be imported (those with {.} at the end)
   param.positions = which(sapply(exploded, base::endsWith, "}"))
-  print(param.positions)
+  #print(param.positions)
 
-  # now extract param types
+  # now extract param types, i.e., everything inbetween curcle braces
   param.types = sapply(exploded[param.positions], function(fragment) {
     gsub("[\\{\\}]", "", regmatches(fragment, gregexpr("\\{.*?\\}", fragment))[[1]])
   })
 
-  print(param.types)
+  #print(param.types)
 
   param.names = sapply(exploded[param.positions], function(fragment) {
     gsub("\\{.*\\}", "", fragment)
   })
-  print(param.names)
+  #print(param.names)
 
   return(list(
     param.positions = param.positions,

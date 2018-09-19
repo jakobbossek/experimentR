@@ -48,11 +48,11 @@ import = function(files, param.sep, param.format.string, append.params = TRUE, p
   checkmate::assertFlag(append.params)
   checkmate::assertFunction(parser)
 
-  #FIXME: make parameter out of it
+  #FIXME: make parameter out of it or better just automatically identify
   file.ext = ".csv"
 
   n.files = length(files)
-  BBmisc::catf("Processing %i file(s) ...", n.files)
+  "!DEBUG [import] Processing `n.files` files."
 
   format = parseFormat(param.format.string, file.ext = file.ext)
 
@@ -63,10 +63,14 @@ import = function(files, param.sep, param.format.string, append.params = TRUE, p
       return(data)
     }
     meta = parseFilePath(current.file, format = format, file.ext = file.ext)
-    #FIXME: this will fail miserably, if data is no data frame!
-    data = cbind(data, as.data.frame(meta, stringsAsFactors = FALSE))
-    return(data)
 
+    #FIXME: this will fail miserably, if data is no data frame!
+    "!DEBUG [import] Appending meta data."
+    data = cbind(data, as.data.frame(meta, stringsAsFactors = FALSE))
+
+    return(data)
   })
+
+  "!DEBUG [import] Combining result files"
   return(do.call(combiner, imported))
 }

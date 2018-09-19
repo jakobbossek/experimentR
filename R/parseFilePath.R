@@ -3,34 +3,36 @@ parseFilePath = function(filepath, format, file.ext = ".csv") {
   checkmate::assertList(format, len = 3L)
 
   # now we need to parse the file in the way we did with the format string
-  #FIXME: write helper
 
   # first remove the file extension
   filepath = gsub(paste0(file.ext, "$"), "", filepath)
 
   # now go and explode string by system file separator
+  #FIXME: can I explode by / and "_" at the same time?
   exploded = strsplit(filepath, split = "/", fixed = TRUE)[[1L]]
 
-  print(exploded)
+  #print(exploded)
 
   exploded = lapply(exploded, function(fragment) {
     exploded2 = strsplit(fragment, split = "_", fixed = TRUE)[[1L]]
     return(exploded2)
   })
 
+  #FIXME: this would not be necessary if I could explode by / and _ simultaneously
   exploded = purrr::flatten(exploded)
 
-  print(exploded)
+  #print(exploded)
 
   # WOW! Nice!
   # Now extract relevant positions from exploded string
   meta = exploded[format$param.positions]
   n.meta = length(meta)
 
-  print(meta)
+  #print(meta)
 
+  #FIXME: I do not need this
   type.funs = paramTypesToTypeConvertFunctions(format$param.types)
-  print(type.funs)
+  #print(type.funs)
 
   # finally convert parameters
   meta = lapply(seq_len(n.meta), function(i) {
@@ -39,7 +41,7 @@ parseFilePath = function(filepath, format, file.ext = ".csv") {
   })
   names(meta) = format$param.names
 
-  print(meta)
+  #print(meta)
 
   return(meta)
 }
