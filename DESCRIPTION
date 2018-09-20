@@ -15,7 +15,8 @@ Depends:
     BBmisc (>= 1.6),
     purrr
 Imports:
-    checkmate (>= 1.1)
+    checkmate (>= 1.1),
+    progress
 Suggests:
     testthat (>= 0.9.1),
     rmarkdown,

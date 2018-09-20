@@ -56,6 +56,11 @@ import = function(files, param.sep, param.format.string, append.params = TRUE, p
 
   format = parseFormat(param.format.string, file.ext = file.ext)
 
+  pbar = progress::progress_bar$new(
+    format = "Processing [:bar] :percent eta: :eta",
+    total = n.files,
+    width = 60
+  )
   imported = lapply(files, function(current.file) {
     data = parser(current.file, ...)
 
@@ -67,7 +72,8 @@ import = function(files, param.sep, param.format.string, append.params = TRUE, p
     #FIXME: this will fail miserably, if data is no data frame!
     "!DEBUG [import] Appending meta data."
     data = cbind(data, as.data.frame(meta, stringsAsFactors = FALSE))
-
+    pbar$tick()
+    Sys.sleep(0.1)
     return(data)
   })
 

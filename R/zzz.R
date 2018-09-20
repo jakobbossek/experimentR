@@ -1,5 +1,6 @@
 #' @import BBmisc
 #' @import checkmate
+#' @import progress
 #' @importFrom utils read.table
 #' @importFrom purrr flatten
 NULL
