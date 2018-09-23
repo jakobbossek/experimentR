@@ -11,6 +11,7 @@ parserDf = function(file, ...) {
   do.call(read.table, args)
 }
 
+#' @export
 parserList = function(file, ...) {
   res = parserDf(file, ...)
   list(res)

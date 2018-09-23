@@ -1,6 +1,8 @@
 #' @import BBmisc
 #' @import checkmate
 #' @import progress
+#' @import crayon
+#' @import emo
 #' @importFrom utils read.table
 #' @importFrom purrr flatten
 NULL

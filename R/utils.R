@@ -10,3 +10,17 @@ paramTypesToTypeConvertFunctions = function(param.types) {
 
   return(map[param.types])
 }
+
+#' Drop files extension(s).
+#'
+#' @param fn [\code{character}]
+#'   Path.
+#' @param levels [\code{integer(1)}]\cr
+#'   How many extensions should be removed?
+#'   Defaults to 1.
+#' @export
+dropExtension = function(fn, levels = 1L) {
+  for (i in 1:levels)
+    fn = gsub("\\.[[:alpha:]]*$", "", fn)
+  return(fn)
+}

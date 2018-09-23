@@ -16,7 +16,9 @@ Depends:
     purrr
 Imports:
     checkmate (>= 1.1),
-    progress
+    progress,
+    crayon,
+    emo
 Suggests:
     testthat (>= 0.9.1),
     rmarkdown,
