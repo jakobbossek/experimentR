@@ -63,17 +63,16 @@ import = function(files, param.sep, param.format.string, append.params = TRUE, p
   )
   imported = lapply(files, function(current.file) {
     data = parser(current.file, ...)
+    pbar$tick()
 
-    if (!append.params) {
+    if (!append.params)
       return(data)
-    }
     meta = parseFilePath(current.file, format = format, file.ext = file.ext)
 
     #FIXME: this will fail miserably, if data is no data frame!
     "!DEBUG [import] Appending meta data."
     data = cbind(data, as.data.frame(meta, stringsAsFactors = FALSE))
-    pbar$tick()
-    Sys.sleep(0.1)
+    #Sys.sleep(0.1)
     return(data)
   })
 
