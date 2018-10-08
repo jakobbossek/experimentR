@@ -8,6 +8,7 @@
 #'   Further atomic values passed down as arguments to \code{sprintf}.
 #' @return [\code{invisible(character(1))}] Silently returns the build path.
 #' As a side effect the path is generated.
+#' @export
 buildOutputPath = function(root, format.string, ...) {
   checkmate::assertDirectoryExists(root)
   checkmate::assertString(format.string)
@@ -15,7 +16,7 @@ buildOutputPath = function(root, format.string, ...) {
   path = file.path(root, path)
   if (!dir.exists(path)) {
     dir.create(path, recursive = TRUE, showWarnings = FALSE)
-    BBmisc::catf("[buildResultFilePath] Created output path '%s'.", path)
+    BBmisc::catf("[buildOutputPath] Created output path '%s'.", path)
   }
   invisible(path)
 }

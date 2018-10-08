@@ -54,7 +54,7 @@ import = function(files, param.sep, param.format.string, append.params = TRUE, p
   n.files = length(files)
   "!DEBUG [import] Processing `n.files` files."
 
-  format = parseFormat(param.format.string, file.ext = file.ext)
+  format = parseFormat(param.format.string, param.sep = param.sep, file.ext = file.ext)
 
   pbar = progress::progress_bar$new(
     format = "Processing [:bar] :percent eta: :eta",
@@ -67,7 +67,7 @@ import = function(files, param.sep, param.format.string, append.params = TRUE, p
 
     if (!append.params)
       return(data)
-    meta = parseFilePath(current.file, format = format, file.ext = file.ext)
+    meta = parseFilePath(current.file, format = format, param.sep = param.sep, file.ext = file.ext)
 
     #FIXME: this will fail miserably, if data is no data frame!
     "!DEBUG [import] Appending meta data."

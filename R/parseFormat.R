@@ -1,5 +1,5 @@
 # prob{c}/x{c}_y{l}_z{n}/repl{i}/ps.csv
-parseFormat = function(s, file.ext = ".csv") {
+parseFormat = function(s, param.sep = param.sep, file.ext = ".csv") {
   checkmate::assertString(s, null.ok = FALSE)
 
   # remove files extension
@@ -12,7 +12,7 @@ parseFormat = function(s, file.ext = ".csv") {
   #print(exploded)
 
   exploded = lapply(exploded, function(fragment) {
-    exploded2 = strsplit(fragment, split = "_", fixed = TRUE)[[1L]]
+    exploded2 = strsplit(fragment, split = param.sep, fixed = TRUE)[[1L]]
     return(exploded2)
   })
 

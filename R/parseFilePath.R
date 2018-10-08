@@ -1,4 +1,4 @@
-parseFilePath = function(filepath, format, file.ext = ".csv") {
+parseFilePath = function(filepath, format, param.sep = "_", file.ext = ".csv") {
   #checkmate::assertFile(filepath, access = "r")
   checkmate::assertList(format, len = 3L)
 
@@ -14,7 +14,7 @@ parseFilePath = function(filepath, format, file.ext = ".csv") {
   #print(exploded)
 
   exploded = lapply(exploded, function(fragment) {
-    exploded2 = strsplit(fragment, split = "_", fixed = TRUE)[[1L]]
+    exploded2 = strsplit(fragment, split = param.sep, fixed = TRUE)[[1L]]
     return(exploded2)
   })
 
