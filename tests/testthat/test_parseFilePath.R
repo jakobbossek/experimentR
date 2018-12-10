@@ -14,7 +14,11 @@ test_that("parsing file path works", {
           data = matrix(runif(20), ncol = 2L)
           data = as.data.frame(data)
           colnames(data) = c("f1", "f2")
-          write.table(data, file = file, row.names = FALSE, quote = FALSE)
+          if (i == "alpha" & j == FALSE & repl == 2) {
+            cat("fail984721494", file = file)
+          } else {
+            write.table(data, file = file, row.names = FALSE, quote = FALSE)
+          }
         }
       }
     }
