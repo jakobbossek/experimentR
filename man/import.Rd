@@ -4,8 +4,8 @@
 \alias{import}
 \title{Import result file from EMOA experiments.}
 \usage{
-import(files, param.sep, param.format.string, append.params = TRUE,
-  parser = parserDf, combiner = rbind, ...)
+import(files, param.sep = NULL, param.format.string, append.params = TRUE,
+  parser = parserDf, combiner = rbind, continue.on.error = TRUE, ...)
 }
 \arguments{
 \item{files}{[\code{character}]\cr
@@ -30,6 +30,11 @@ with some adapted parameters.}
 \item{combiner}{[\code{function}]\cr
 Function used to combine imported results from multiple results files.
 Default is \code{\link[base]{rbind}}, since the default parser returns data frames.}
+
+\item{continue.on.error}{[\logical(1)]\cr
+Should the import process be continued if an error occurs due to failed file or file name parsing?
+Default is \code{TRUE}. In this case errors are logged and a log-file is written to the current
+working directory.}
 
 \item{...}{[any]\cr
 Further optional arguments passed down to \code{parser}.}
