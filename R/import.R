@@ -61,7 +61,7 @@ import = function(files, param.sep = NULL, param.format.string, append.params = 
   "!DEBUG [import] Processing `n.files` files."
 
   format = parseFormat(param.format.string, param.sep = param.sep, file.ext = file.ext)
-  print(format)
+  #print(format)
 
   pbar = progress::progress_bar$new(
     format = "Processing [:bar] :percent eta: :eta",
@@ -84,10 +84,8 @@ import = function(files, param.sep = NULL, param.format.string, append.params = 
 
     if (!append.params)
       return(data)
-    print("parsing file")
     meta = try({parseFilePath(current.file, format = format, param.sep = param.sep, file.ext = file.ext)}, silent = TRUE)
 #    print(meta)
-    print(length(meta))
     # log if failed
     if (inherits(meta, "try-error")) {
       issues = rbind(issues, data.frame(file = current.file, error = meta[1L], type = "meta"))
@@ -99,7 +97,7 @@ import = function(files, param.sep = NULL, param.format.string, append.params = 
     #FIXME: this will fail miserably, if data is no data frame!
     "!DEBUG [import] Appending meta data."
     data = cbind(data, as.data.frame(meta, stringsAsFactors = FALSE))
-    print(data)
+    #print(data)
     #Sys.sleep(0.1)
     return(data)
   })
@@ -113,7 +111,7 @@ import = function(files, param.sep = NULL, param.format.string, append.params = 
 
   imported = imported[!sapply(imported, is.null)]
 
-  print(imported)
+  #print(imported)
 
   "!DEBUG [import] Combining result files"
   return(do.call(combiner, imported))
