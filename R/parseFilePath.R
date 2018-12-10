@@ -1,4 +1,4 @@
-parseFilePath = function(filepath, format, param.sep = "_", file.ext = ".csv") {
+parseFilePath = function(filepath, format, param.sep = NULL, file.ext = ".csv") {
   #checkmate::assertFile(filepath, access = "r")
   checkmate::assertList(format, len = 3L)
 
@@ -13,15 +13,17 @@ parseFilePath = function(filepath, format, param.sep = "_", file.ext = ".csv") {
 
   #print(exploded)
 
-  exploded = lapply(exploded, function(fragment) {
-    exploded2 = strsplit(fragment, split = param.sep, fixed = TRUE)[[1L]]
-    return(exploded2)
-  })
+  if (!is.null(param.sep)) {
+    exploded = lapply(exploded, function(fragment) {
+      exploded2 = strsplit(fragment, split = param.sep, fixed = TRUE)[[1L]]
+      return(exploded2)
+    })
 
-  #FIXME: this would not be necessary if I could explode by / and _ simultaneously
-  exploded = purrr::flatten(exploded)
+    #FIXME: this would not be necessary if I could explode by / and _ simultaneously
+    exploded = purrr::flatten(exploded)
 
-  #print(exploded)
+    #print(exploded)
+  }
 
   # WOW! Nice!
   # Now extract relevant positions from exploded string

@@ -1,5 +1,5 @@
 # prob{c}/x{c}_y{l}_z{n}/repl{i}/ps.csv
-parseFormat = function(s, param.sep = param.sep, file.ext = ".csv") {
+parseFormat = function(s, param.sep = NULL, file.ext = ".csv") {
   checkmate::assertString(s, null.ok = FALSE)
 
   # remove files extension
@@ -11,15 +11,16 @@ parseFormat = function(s, param.sep = param.sep, file.ext = ".csv") {
 
   #print(exploded)
 
-  exploded = lapply(exploded, function(fragment) {
-    exploded2 = strsplit(fragment, split = param.sep, fixed = TRUE)[[1L]]
-    return(exploded2)
-  })
+  if (!is.null(param.sep)) {
+    exploded = lapply(exploded, function(fragment) {
+      exploded2 = strsplit(fragment, split = param.sep, fixed = TRUE)[[1L]]
+      return(exploded2)
+    })
 
-  # flatten structure
-  exploded = purrr::flatten(exploded)
-  #print(exploded)
-
+    # flatten structure
+    exploded = purrr::flatten(exploded)
+    #print(exploded)
+  }
 
   # now save positions which are to be imported (those with {.} at the end)
   param.positions = which(sapply(exploded, base::endsWith, "}"))

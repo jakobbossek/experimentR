@@ -36,17 +36,23 @@
 #' @param combiner [\code{function}]\cr
 #'   Function used to combine imported results from multiple results files.
 #'   Default is \code{\link[base]{rbind}}, since the default parser returns data frames.
+#' @param continue.on.error [\logical(1)]\cr
+#'   Should the import process be continued if an error occurs due to failed file or file name parsing?
+#'   Default is \code{TRUE}. In this case errors are logged and a log-file is written to the current
+#'   working directory.
 #' @param ... [any]\cr
 #'   Further optional arguments passed down to \code{parser}.
 #' @return \code{any} Reduced results (\code{data.frame} by default).
 #' @export
-import = function(files, param.sep, param.format.string, append.params = TRUE, parser = parserDf, combiner = rbind, ...) {
+import = function(files, param.sep = NULL, param.format.string, append.params = TRUE, parser = parserDf, combiner = rbind, continue.on.error = TRUE, ...) {
   #checkmate::assertFileExists(file, access = "r")
 
-  checkmate::assertString(param.sep, null.ok = FALSE)
+  checkmate::assertString(param.sep, null.ok = TRUE)
   checkmate::assertString(param.format.string, null.ok = FALSE)
   checkmate::assertFlag(append.params)
   checkmate::assertFunction(parser)
+  checkmate::assertFunction(combiner)
+  checkmate::assertFlag(continue.on.error)
 
   #FIXME: make parameter out of it or better just automatically identify
   file.ext = ".csv"
@@ -55,26 +61,59 @@ import = function(files, param.sep, param.format.string, append.params = TRUE, p
   "!DEBUG [import] Processing `n.files` files."
 
   format = parseFormat(param.format.string, param.sep = param.sep, file.ext = file.ext)
+  print(format)
 
   pbar = progress::progress_bar$new(
     format = "Processing [:bar] :percent eta: :eta",
     total = n.files,
     width = 60
   )
+
+  issues = data.frame()
+
   imported = lapply(files, function(current.file) {
-    data = parser(current.file, ...)
+    data = try({parser(current.file, ...)}, silent = TRUE)
+    # log if failed
+    if (inherits(data, "try-error")) {
+      issues = rbind(issues, data.frame(file = current.file, error = data[1L], type = "data"))
+      if (!continue.on.error)
+        BBmisc::stopf("[import] Error in parsing result file '%s'. Aborting import!", current.file)
+      return(NULL)
+    }
     pbar$tick()
 
     if (!append.params)
       return(data)
-    meta = parseFilePath(current.file, format = format, param.sep = param.sep, file.ext = file.ext)
+    print("parsing file")
+    meta = try({parseFilePath(current.file, format = format, param.sep = param.sep, file.ext = file.ext)}, silent = TRUE)
+#    print(meta)
+    print(length(meta))
+    # log if failed
+    if (inherits(meta, "try-error")) {
+      issues = rbind(issues, data.frame(file = current.file, error = meta[1L], type = "meta"))
+      if (!continue.on.error)
+        BBmisc::stopf("[import] Error in parsing file path '%s'. Aborting import!", current.file)
+      return(NULL)
+    }
 
     #FIXME: this will fail miserably, if data is no data frame!
     "!DEBUG [import] Appending meta data."
     data = cbind(data, as.data.frame(meta, stringsAsFactors = FALSE))
+    print(data)
     #Sys.sleep(0.1)
     return(data)
   })
+
+  if (nrow(issues) > 0L) {
+    log.file = sprintf("import-%s.log", format(Sys.time(), "%d%m%Y_%H%M"))
+    write.table(issues, file = log.file, row.names = FALSE, quote = FALSE, col.names = TRUE)
+    BBmisc::messagef("[import] In total %i result files caused an data import or meta import error.
+      See log file '%s' in your working directory for details.", nrow(issues), log.file)
+  }
+
+  imported = imported[!sapply(imported, is.null)]
+
+  print(imported)
 
   "!DEBUG [import] Combining result files"
   return(do.call(combiner, imported))
