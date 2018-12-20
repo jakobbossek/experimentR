@@ -3,7 +3,8 @@
 #' @import progress
 #' @import crayon
 #' @import emo
-#' @importFrom utils read.table
+#' @importFrom data.table rbindlist
+#' @importFrom utils read.table write.table
 #' @importFrom purrr flatten
 NULL
 

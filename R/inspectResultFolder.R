@@ -5,6 +5,8 @@
 #' @param pattern [\code{character(1)}]\cr
 #'   Pattern used to filter files recursively. See argument \code{pattern} of
 #'   \code{\link[base]{list.files}}.
+#' @param ... [any]\cr
+#'   Passed down to \code{\link{list.files}}.
 #' @return Nothing
 #' @export
 inspectResultFolder = function(path, pattern = NULL, ...) {

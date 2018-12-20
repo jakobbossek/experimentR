@@ -31,12 +31,12 @@
 #'   Default is \code{TRUE}.
 #' @param parser [\code{function(file, ...)}]\cr
 #'   Function used to read the file.
-#'   Default is \code{\link{parserDf}}, which is basically \code{\link[utils]{read.table}},
+#'   Default is \code{parserDatatable}, which is basically \code{\link[data.table]{fread}},
 #'   with some adapted parameters.
 #' @param combiner [\code{function}]\cr
 #'   Function used to combine imported results from multiple results files.
 #'   Default is \code{\link[base]{rbind}}, since the default parser returns data frames.
-#' @param continue.on.error [\logical(1)]\cr
+#' @param continue.on.error [\code{logical(1)}]\cr
 #'   Should the import process be continued if an error occurs due to failed file or file name parsing?
 #'   Default is \code{TRUE}. In this case errors are logged and a log-file is written to the current
 #'   working directory.
@@ -44,7 +44,10 @@
 #'   Further optional arguments passed down to \code{parser}.
 #' @return \code{any} Reduced results (\code{data.frame} by default).
 #' @export
-import = function(files, param.sep = NULL, param.format.string, append.params = TRUE, parser = parserDf, combiner = rbind, continue.on.error = TRUE, ...) {
+import = function(files,
+  param.sep = NULL, param.format.string, append.params = TRUE,
+  parser = parserDatatable, combiner = rbind,
+  continue.on.error = TRUE, ...) {
   #checkmate::assertFileExists(file, access = "r")
 
   checkmate::assertString(param.sep, null.ok = TRUE)
@@ -113,6 +116,7 @@ import = function(files, param.sep = NULL, param.format.string, append.params = 
 
   #print(imported)
 
+  #FIXME: combiner
   "!DEBUG [import] Combining result files"
-  return(do.call(combiner, imported))
+  return(do.call(data.table::rbindlist, list(l = imported)))
 }

@@ -18,7 +18,8 @@ Imports:
     checkmate (>= 1.1),
     progress,
     crayon,
-    emo
+    emo,
+    data.table
 Suggests:
     testthat (>= 0.9.1),
     rmarkdown,

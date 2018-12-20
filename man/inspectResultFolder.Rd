@@ -13,6 +13,9 @@ Path to result folder.}
 \item{pattern}{[\code{character(1)}]\cr
 Pattern used to filter files recursively. See argument \code{pattern} of
 \code{\link[base]{list.files}}.}
+
+\item{...}{[any]\cr
+Passed down to \code{\link{list.files}}.}
 }
 \value{
 Nothing
